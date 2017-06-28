@@ -1,18 +1,29 @@
-import _$ from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import TestUtils from 'react-addons-test-utils';
-import jsdom from 'jsdom';
+import _$ from 'jquery';
+import TestUtils from 'react-dom/test-utils';
+import { JSDOM } from 'jsdom';
 import chai, { expect } from 'chai';
 import chaiJquery from 'chai-jquery';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from '../src/reducers';
 
-global.document = jsdom.jsdom('<!doctype html><html><body></body></html>');
-global.window = global.document.defaultView;
-global.navigator = global.window.navigator;
-const $ = _$(window);
+/*
+  global.document = new JSDOM('<!doctype html><html><body></body></html>');
+  global.window = global.document.window;
+  global.navigator = global.window.navigator;
+*/
+const doc = new JSDOM('<!doctype html><html><body></body></html>');
+const win = doc.window;
+
+global.document = win.document;
+global.window = win;
+
+const $ = _$(win);
+
+// const $ = _$(global.document.window);
+
 
 chaiJquery(chai, chai.util, $);
 
