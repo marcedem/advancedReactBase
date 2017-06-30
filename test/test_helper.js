@@ -9,11 +9,7 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducers from '../src/reducers';
 
-/*
-  global.document = new JSDOM('<!doctype html><html><body></body></html>');
-  global.window = global.document.window;
-  global.navigator = global.window.navigator;
-*/
+// Set up testing environrnement to run like a browser in the command line
 const doc = new JSDOM('<!doctype html><html><body></body></html>');
 const win = doc.window;
 
@@ -22,11 +18,10 @@ global.window = win;
 
 const $ = _$(win);
 
-// const $ = _$(global.document.window);
-
-
+// set up chai-jquery
 chaiJquery(chai, chai.util, $);
 
+// build renderComponent helper that should render a given react class
 function renderComponent(ComponentClass, props = {}, state = {}) {
   const componentInstance =  TestUtils.renderIntoDocument(
     <Provider store={createStore(reducers, state)}>
@@ -34,9 +29,10 @@ function renderComponent(ComponentClass, props = {}, state = {}) {
     </Provider>
   );
 
-  return $(ReactDOM.findDOMNode(componentInstance));
+  return $(ReactDOM.findDOMNode(componentInstance)); // produces HTML
 }
 
+// build helper for simulating events
 $.fn.simulate = function(eventName, value) {
   if (value) {
     this.val(value);
@@ -45,3 +41,8 @@ $.fn.simulate = function(eventName, value) {
 };
 
 export {renderComponent, expect};
+
+
+
+
+
